@@ -5,6 +5,8 @@ Gramine&SDK-chart-on-tke是由Intel提供的包含Gramine libOS基于SGX的helm 
 ## 部署
 由于SGX功能的实现依赖于硬件特性,因此在部署chart文件之前,需要对于添加的node进行检查,SGX功能只存在于ICX及之后的机型中,如果node的kernel版本低于5.11,那么最好手动更换kernel版本至5.11甚至更高(否则可能需要安装很多额外的安装包).
 
+其次,由于Intel SGX对于OS的版本有要求,具体可参照链接(https://github.com/intel/linux-sgx) , 请确保您的node操作系统满足要求.
+
 首先检查node节点下,/dev/sgx/目录下是否存在enclave和provision两个链接文件,如果没有,请使用/dev/sgx_enclave和/dev/sgx_provision手动创建链接文件,指令可参考
 
 cd /dev/sgx/
