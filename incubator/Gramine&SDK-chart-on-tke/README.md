@@ -4,7 +4,7 @@ Intel提供的包含Gramine libOS基于SGX的镜像，该镜像包含了默认�
 本镜像包含了SGX driver，SGX SDK，SGX PSW，SGX DCAP和Gramine,提供了基于Gramine运行所需的基础环境, 用户可以自主选择基于Gramine或者是 Intel SGX SDK进行SGX应用程序的开发, 自主部署需要的SGX应用场景，例如pytorch，tensorflow，openjdk，sqlite等, 同时用户也可以借助helm chart,将该镜像部署到多个node上。 
 ## 部署
 由于SGX功能的实现依赖于硬件特性,因此在部署chart文件之前,需要对于添加的node进行检查,SGX功能只存在于ICX及之后的机型中,如果node的kernel版本低于5.11,那么最好手动更换kernel版本至5.11甚至更高(否则可能需要安装很多额外的安装包),更换kernel版本的指令可参考(以5.14.0的kernel版本为例):
-
+```
   wget https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.14/amd64/linux-headers-5.14.0-051400_5.14.0-051400.202108292331_all.deb 
 
   sudo dpkg -i linux-headers-5.14.0-051400_5.14.0-051400.202108292331_all.deb
@@ -15,16 +15,20 @@ Intel提供的包含Gramine libOS基于SGX的镜像，该镜像包含了默认�
 
   sudo dpkg -i linux-image-unsigned-5.14.0-051400-generic_5.14.0-051400.202108292331_amd64.deb linux-modules-5.14.0-051400-generic_5.14.0-051400.202108292331_amd64.deb
 
-
+```
 其次,由于Intel SGX对于OS的版本有要求,具体可参照链接(https://github.com/intel/linux-sgx) , 请确保您的node操作系统满足要求.
 
 首先检查node节点下,/dev/sgx/目录下是否存在enclave和provision两个链接文件,如果没有,请使用/dev/sgx_enclave和/dev/sgx_provision手动创建链接文件,指令可参考
+
+```
 
   cd /dev/sgx/
 
   sudo ln -s ../sgx_enclave enclave 
 
   sudo ln -s ../sgx_provision probision 
+  
+```
 
 由于SGX功能的实现,依赖于硬件支持, 用户需要手动部署tke-sgx-plugin,从而让pod支持SGX特性,tke-sgx-plugin.yaml文件同样位于charts/incubator/目录下,可参考../incubator/tke-sgx-plugin目录下的yaml文件values.yaml.
 
